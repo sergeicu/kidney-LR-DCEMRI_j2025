@@ -1,5 +1,6 @@
 import numpy as np
 
+# difference between functions: https://chatgpt.com/share/7fe33e26-c4b6-447f-b165-1a21d42830a3
 
 def partition_volume(dat_slice: dict,
                      spv: int,

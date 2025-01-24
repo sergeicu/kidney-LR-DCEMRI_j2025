@@ -15,9 +15,9 @@ def data_l2_loss(x: torch.tensor,
     x_ = torch.complex(x[:, 0, :, :], x[:, 1, :, :])
 
     out_ = operator(x_.unsqueeze(1) * coil_p,
-                    k_traj, smaps=smap)
+                    k_traj, smaps=smap) # smap is all ones because we multiply our image by sensitivity maps first... 
     out_ = out_.reshape(size_batch, num_coil, n_sample, n_spk)
-    out_ *= sqrt_dcf
+    out_ *= sqrt_dcf # no idea why - why do we multiply by densitiy compensation? isn't this already included in the operator? 
     out_ = out_.permute(0, 2, 1, 3)
 
     return torch.mean((torch.real(out_) - torch.real(y)) ** 2 +

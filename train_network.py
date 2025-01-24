@@ -16,26 +16,23 @@ from model.network import GenConvNet, DenseMapNet
 from model.loss import data_l2_loss
 from model.z_generator import gen_line_segment
 
-root_dat = './data/'
+# root_dat = './data/'
+root_dat = '/fileserver/external/body/radialData/reruns/EXAMPLE_SUBJECT/sub_1/'
 root_model = './torch_model/'
 root_tensorboard = './tensor_b/'
-subject_id = 'sub-9'
+# subject_id = 'sub-9'
+subject_id = ''
 single_slice_idx = 1
+
+
+# from IPython import embed; embed()
 
 # Insert data here / dat_slice is data dictionary
 dat_slice = {}
-dat_slice['coilprofile'] = hdfs.loadmat(
-    os.path.join(os.path.join(os.path.join(root_dat, subject_id)),
-                 'coilprofile_slice_1.mat'))['coilprofile_slice_1']
-dat_slice['dcf'] = hdfs.loadmat(
-    os.path.join(os.path.join(os.path.join(root_dat, subject_id)),
-                 'dcf_slice_1.mat'))['dcf_slice_1']
-dat_slice['k3n'] = hdfs.loadmat(
-    os.path.join(os.path.join(os.path.join(root_dat, subject_id)),
-                 'k3n_slice_1.mat'))['k3n_slice_1']
-dat_slice['k_samples'] = hdfs.loadmat(
-    os.path.join(os.path.join(os.path.join(root_dat, subject_id)),
-                 'k_samples_slice_1.mat'))['k_samples_slice_1']
+dat_slice['coilprofile'] = hdfs.loadmat(os.path.join(root_dat, subject_id, 'coilprofile/coilprofile_slice_01.mat'))['coilprofile_slice_01']
+dat_slice['dcf'] = hdfs.loadmat(os.path.join(root_dat, subject_id,'dcf/dcf_slice_01.mat'))['dcf_slice_01']
+dat_slice['k3n'] = hdfs.loadmat(os.path.join(root_dat, subject_id, 'k3n/k3n_slice_01.mat'))['k3n_slice_01']
+dat_slice['k_samples'] = hdfs.loadmat(os.path.join(root_dat, subject_id, 'k_samples/k_samples_slice_01.mat'))['k_samples_slice_01']
 
 # For reproducibility
 torch.manual_seed(123)
@@ -99,7 +96,7 @@ len_dat = len(div_k_samples)
 idx_c_p = np.array([0 for _ in range(len_dat)])
 coil_p = [coil_p]
 
-low_dim_r = gen_line_segment(max_r, len_dat, n_z_dim, bias_z)
+low_dim_r = gen_line_segment(max_r, len_dat, n_z_dim, bias_z) # this is where we sample z 
 np.savetxt(os.path.join(path_z, 'z_slice_{}.txt'.format(single_slice_idx)),
            low_dim_r)
 
